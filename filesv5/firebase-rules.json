@@ -1,0 +1,36 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read":  "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+
+        "saques": {
+          "$saqueId": {
+            ".read":  "$uid === auth.uid",
+            ".write": "$uid === auth.uid"
+          }
+        }
+      }
+    },
+
+    "perguntas": {
+      ".read":  "auth !== null",
+      ".write": false
+    },
+
+    "saques": {
+      ".read":  "auth !== null",
+      ".write": "auth !== null",
+      "$saqueId": {
+        ".read":  "auth !== null && (data.child('userId').val() === auth.uid || root.child('admins/' + auth.uid).exists())",
+        ".write": "auth !== null"
+      }
+    },
+
+    "admins": {
+      ".read": "auth !== null",
+      ".write": false
+    }
+  }
+}
